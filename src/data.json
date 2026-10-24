@@ -499,6 +499,8 @@
    "setup_usd": 227500.0,
    "annual_usd": 19500.0,
    "year1_usd": 247000.0,
+   "staff_hours": 120.0,
+   "lead_months": 1,
    "scenarios": {
     "cautious": {
      "hours": 564.7,
@@ -525,6 +527,8 @@
    "setup_usd": 457500.0,
    "annual_usd": 108300.0,
    "year1_usd": 565800.0,
+   "staff_hours": 690.0,
+   "lead_months": 3,
    "scenarios": {
     "cautious": {
      "hours": 364.4,

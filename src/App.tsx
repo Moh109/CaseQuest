@@ -4,6 +4,7 @@ import FindingParts from "./sections/FindingParts";
 import FindingSafety from "./sections/FindingSafety";
 import FindingWarning from "./sections/FindingWarning";
 import Prototype from "./sections/Prototype";
+import Options from "./sections/Options";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <FindingSafety />
         <FindingWarning />
         <Prototype />
+        <Options />
       </main>
     </>
   );

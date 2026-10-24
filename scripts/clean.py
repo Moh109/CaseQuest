@@ -186,15 +186,22 @@ costB_setup = (float(o1["setup_usd"]) * n_assets + float(o2["setup_usd"]) + floa
 costB_annual = (float(o1["annual_usd"]) * n_assets + float(o2["annual_usd"]) + float(o6["annual_usd"]) * n_sites
                 + edge["edge_annual_usd"].sum() + hse_annual)
 
+# Staff hours to stand each option up (HSE action hours are shared and counted separately)
+training_hours = float((sites["technicians"] * sites["training_hours_per_person"]).sum())
+hoursA = float(o4["install_person_hours"]) * n_sites
+hoursB = float(o1["install_person_hours"]) * n_assets + float(o2["install_person_hours"]) + training_hours
+
 options = {}
-for key, opt, setup, annual in [("A", "O4", costA_setup, costA_annual), ("B", "O1", costB_setup, costB_annual)]:
+for key, opt, setup, annual, staff in [("A", "O4", costA_setup, costA_annual, hoursA),
+                                       ("B", "O1", costB_setup, costB_annual, hoursB)]:
     year1 = setup + annual
     scen = {}
     for lvl, name in [("low", "cautious"), ("base", "expected"), ("high", "optimistic")]:
         e = option_effect(opt, lvl)
         e["payback_months"] = round(year1 / e["profit"] * 12, 1)
         scen[name] = e
-    options[key] = {"option_id": opt, "setup_usd": setup, "annual_usd": annual, "year1_usd": year1, "scenarios": scen}
+    options[key] = {"option_id": opt, "setup_usd": setup, "annual_usd": annual, "year1_usd": year1,
+                    "staff_hours": staff, "lead_months": int(sol.loc[opt, "lead_months"]), "scenarios": scen}
 
 # ---- A010 story ----
 a10 = rd[(rd["asset_id"] == "A010") & rd["quality"].eq("Valid") & rd["operating_state"].eq("Running")
