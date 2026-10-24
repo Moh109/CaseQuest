@@ -12,9 +12,9 @@ export const CHECKS = [
 
 export type Order = {
   id: string; asset: string; site: string; day: string; reason: string;
-  checks: boolean[]; part: "shelf" | "order" | null; status: "open" | "requested" | "approved";
+  checks: boolean[]; part: "shelf" | "order" | null; status: "open" | "requested" | "approved"; demo?: boolean;
 };
-export type Entry = { n: number; at: string; day: string; role: Role | "system"; action: string; detail: string };
+export type Entry = { n: number; at: string; day: string; role: Role | "system"; action: string; detail: string; demo?: boolean };
 export type Reorder = { id: string; site: string; kit: Kit; qty: number; status: "requested" | "approved" };
 type State = { role: Role; site: string; day: string; verified: string[]; orders: Order[]; log: Entry[]; active: string | null; tab: Tab;
   shelf: Record<string, number>; reorders: Reorder[] };
@@ -32,7 +32,40 @@ export const holdIds = (site: string, verified: string[]) => sev5.filter((a) => 
 
 export const key = (site: string, kit: Kit) => `${site}:${kit}`;
 const shelf0 = Object.fromEntries(data.sites.flatMap((x) => KITS.map((k) => [key(x.id, k), initialStock(x.id, k)])));
-const init: State = { role: "tech", site: "S04", day: "2025-09-19", verified: [], orders: [], log: [], active: null, tab: "board", shelf: shelf0, reorders: [] };
+/**
+ * Demo data: two example work orders so the lists aren't empty at the start.
+ * Mesa's two critical fixes are pre-verified so its order can legitimately sit at "Waiting for approval";
+ * Arroyo stays on hold for the live walkthrough.
+ */
+function demoState() {
+  const shelf = { ...shelf0 };
+  const cedarKit = key("S01", "Bearing kit");
+  shelf[cedarKit] = Math.max(0, shelf[cedarKit] - 1);
+  const mesaKit = key("S02", "Bearing kit");
+  const mesaPart: Order["part"] = shelf[mesaKit] > 0 ? "shelf" : "order";
+  if (mesaPart === "shelf") shelf[mesaKit] -= 1;
+  const orders: Order[] = [
+    { id: "WO-002", asset: "A004", site: "S02", day: "2025-09-19", reason: "Demo data", checks: [true, true, true], part: mesaPart, status: "requested", demo: true },
+    { id: "WO-001", asset: "A001", site: "S01", day: "2025-09-19", reason: "Demo data", checks: [true, true, true], part: "shelf", status: "approved", demo: true },
+  ];
+  const rows: [string, Entry["role"], string, string][] = [
+    ["6:40 AM", "tech", "WO-001 opened", "A001 · Cedar"],
+    ["6:44 AM", "tech", "WO-001 pre-job checks 3 of 3", "LOTO, H₂S test, pressure"],
+    ["6:45 AM", "tech", "WO-001 part reserved", "Bearing kit taken from Cedar shelf"],
+    ["6:46 AM", "tech", "WO-001 sent for approval", "Checks done, part sorted"],
+    ["6:58 AM", "super", "WO-001 approved", "Repair released"],
+    ["7:05 AM", "hse", "H007 verified closed", "Gas detection (H₂S) check at Mesa"],
+    ["7:09 AM", "hse", "H008 verified closed", "Lock-out / tag-out check at Mesa"],
+    ["7:09 AM", "hse", "Site hold lifted", "Mesa: all critical fixes verified"],
+    ["7:20 AM", "tech", "WO-002 opened", "A004 · Mesa"],
+    ["7:26 AM", "tech", "WO-002 pre-job checks 3 of 3", "LOTO, H₂S test, pressure"],
+    ["7:27 AM", "tech", mesaPart === "shelf" ? "WO-002 part reserved" : "WO-002 part order requested", mesaPart === "shelf" ? "Bearing kit taken from Mesa shelf" : "Needs supervisor approval"],
+    ["7:28 AM", "tech", "WO-002 sent for approval", "Waiting for the site supervisor"],
+  ];
+  const log: Entry[] = rows.map(([at, role, action, detail], i) => ({ n: i + 1, at, day: "2025-09-19", role, action, detail, demo: true })).reverse();
+  return { verified: ["H007", "H008"], orders, log, shelf };
+}
+const init: State = { role: "tech", site: "S04", day: "2025-09-19", active: null, tab: "board", reorders: [], ...demoState() };
 
 function reducer(s: State, a: Action): State {
   const clock = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });

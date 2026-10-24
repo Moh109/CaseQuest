@@ -10,7 +10,7 @@ export default function Safety() {
     <div>
       <p className="text-[15px] text-muted max-w-[760px] leading-snug">
         Open safety actions from the case's HSE log. A site is on hold while any critical (severity 5) fix is open.
-        Only the HSE supervisor can verify a fix. Days overdue are counted as of the board date, {fmtDay(s.day)}.
+        Only the HSE supervisor can verify a fix. Days overdue are counted as of the board date, {fmtDay(s.day)}. By Oct 1, 2026, the {data.hse.open_sev5} critical fixes were {data.hse.avg_days_overdue_sev5} days overdue on average.
         {s.role !== "hse" && <b className="text-ink"> Switch role to HSE supervisor to verify.</b>}
       </p>
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -37,7 +37,7 @@ export default function Safety() {
                           <p className="font-semibold text-[15px]">{HAZARD[a.hazard] ?? a.hazard}</p>
                           <p className="text-[12px] text-muted">
                             {a.id} · {a.asset_id} · {a.severity === 5 ? <b className="text-ink">critical, blocks work</b> : `severity ${a.severity}`} ·{" "}
-                            {od > 0 ? `${od} days overdue as of ${s.day}` : `due ${a.due}`}
+                            {od > 0 ? `${od} days overdue as of ${s.day}` : `due ${a.due}`}{a.severity === 5 && ` (${a.days_overdue} days by Oct 1, 2026)`}
                           </p>
                         </div>
                         {v ? <Chip tone="safe">✓ Verified</Chip> : (

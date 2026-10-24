@@ -34,8 +34,8 @@ export default function Orders() {
           <li key={x.id}>
             <button onClick={() => d({ type: "select", id: x.id })}
               className={`w-full text-left rounded-[16px] px-4 py-3 whitespace-nowrap ${x.id === o.id ? "bg-ink text-page" : "bg-panel"}`}>
-              <span className="block font-bold text-[15px]">{x.id} · {x.asset}</span>
-              <span className="block text-[12px] opacity-70">{siteName(x.site)} · {x.status === "approved" ? "Approved" : x.status === "requested" ? "Waiting approval" : "Open"}</span>
+              <span className="block font-bold text-[15px]">{x.id} · {x.asset}{x.demo && <span className="ml-2 text-[11px] font-semibold opacity-70">Demo data</span>}</span>
+              <span className="block text-[12px] opacity-70">{siteName(x.site)} · {x.status === "approved" ? "Approved" : x.status === "requested" ? "Waiting for approval" : "Open"}</span>
             </button>
           </li>
         ))}
@@ -45,6 +45,7 @@ export default function Orders() {
         <div className="flex flex-wrap items-center gap-3">
           <h3 className="text-[26px] md:text-[32px] font-bold tracking-tight">{o.id} · {o.asset}</h3>
           <HoldChip hold={hold.length > 0} />
+          {o.demo && <Chip tone="muted">Demo data</Chip>}
         </div>
         <p className="text-muted text-[15px]">{siteName(o.site)} · {asset.type} · {o.reason} · opened for {o.day}</p>
 

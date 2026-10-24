@@ -1,5 +1,5 @@
 import { data } from "../data";
-import { assetsAt, BOARD_TIME, fmtDay, history, PART, statusOn } from "../lib";
+import { assetsAt, BOARD_TIME, fmtDay, history, REORDER_POINT, PART, statusOn } from "../lib";
 import { holdIds, key, siteName, useStore } from "../store";
 import { Btn, Chip, HoldChip, Lock, Spark, StatusChip } from "./bits";
 
@@ -72,7 +72,7 @@ export default function Board() {
               <div className="mt-4 pt-4 border-t border-line/70 flex items-center justify-between gap-2">
                 <div>
                   <p className="text-[13px] font-semibold">{PART[a.type]}</p>
-                  <p className={`text-[13px] font-bold ${shelf ? "text-safe" : "text-warn"}`}>{shelf ? `On the shelf (${s.shelf[key(a.site, PART[a.type])]})` : "Not on the shelf"}</p>
+                  <p className={`text-[13px] font-bold ${shelf ? "text-safe" : "text-warn"}`}>{shelf ? `On the shelf (${s.shelf[key(a.site, PART[a.type])]})${s.shelf[key(a.site, PART[a.type])] < REORDER_POINT ? " · below reorder point" : ""}` : "Not on the shelf"}</p>
                 </div>
                 <Chip tone="muted">Simulated</Chip>
               </div>

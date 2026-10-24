@@ -15,7 +15,7 @@ export default function Log() {
             <li key={e.n} className="px-5 py-3 grid grid-cols-[56px_1fr] sm:grid-cols-[72px_150px_1fr] gap-x-3 gap-y-0.5 text-[14px]">
               <span className="tnum text-muted font-semibold">{e.at}</span>
               <span className="text-muted sm:order-none order-last col-start-2 sm:col-start-auto text-[12px] sm:text-[14px]">{e.role === "system" ? "System" : ROLE_LABEL[e.role]}</span>
-              <span><b>{e.action}</b> <span className="text-muted">· {e.detail} · board {e.day}</span></span>
+              <span><b>{e.action}</b> <span className="text-muted">· {e.detail} · board {e.day}</span>{e.demo && <span className="ml-2 rounded-full bg-ink/10 px-2 py-0.5 text-[11px] font-semibold text-ink/60">Demo data</span>}</span>
             </li>
           ))}
         </ol>
