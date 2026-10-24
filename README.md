@@ -1,5 +1,7 @@
 # Spares Radar
 
+**Live:** https://spares-radar.vercel.app
+
 **The right part, there before the machine breaks. And no repair starts until it's safe.**
 
 The morning check for Lone Mesa crews (Operation Spirit, CaseQuest 2026). A working prototype app
@@ -17,7 +19,8 @@ Site stock % is case data. Which kit is on each shelf is simulated from it.
 
 Built with Vite, React, TypeScript, Tailwind CSS and Framer Motion. All charts are hand-built SVG.
 
-> Fictional data supplied by the competition. Not affiliated with or endorsed by ConocoPhillips.
+> Student entry for CaseQuest 2026, not affiliated with ConocoPhillips. Fictional data supplied by the competition.
+> The app is read-only: it never controls equipment. A live connection to Lone Mesa systems is phase 2 (case option O2).
 
 ## Run it
 

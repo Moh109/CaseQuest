@@ -106,7 +106,7 @@ function reducer(s: State, a: Action): State {
         reorders: s.reorders.map((x) => (x.id === a.id ? { ...x, status: "approved" } : x)),
         log: add("super", `${r.id} approved`, `${r.qty} × ${r.kit} restocked at ${siteName(r.site)} (simulated delivery)`) };
     }
-    case "reset": return { ...init, role: s.role };
+    case "reset": return init;
   }
 }
 

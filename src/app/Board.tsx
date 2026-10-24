@@ -90,7 +90,7 @@ export default function Board() {
         })}
       </div>
       <p className="mt-4 text-[12px] text-muted leading-snug">
-        Status as of the 8:00 AM check. Readings: valid readings taken while running, from the case data. Warning at 1.3× normal. Site stock % is case data; which kit is on the shelf is simulated from it.
+        Status as of the 8:00 AM check. Readings: valid readings taken while running, from the case data. Warning at 1.3× normal. Site stock % is case data; which kit is on the shelf is simulated from it. Uses existing daily readings. No new sensors (we did not choose Option B).
         Showing {siteName(s.site)}.
       </p>
     </div>

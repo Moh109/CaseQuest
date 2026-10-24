@@ -14,6 +14,9 @@ export default function Impact() {
       <p className="mt-4 text-[13px] text-muted leading-snug">
         Expected case. Year 1 = {fmtK(A.setup_usd)} up front (parts program plus all {data.hse.open} open safety fixes) + {fmtK(A.annual_usd)} a year.
       </p>
+      <p className="mt-2 text-[13px] text-muted leading-snug">
+        The prototype runs on data Lone Mesa already exports. A live connection to their systems is phase 2 (case option O2: $40K setup + $18K/yr), not included in $227.5K.
+      </p>
     </div>
   );
 }

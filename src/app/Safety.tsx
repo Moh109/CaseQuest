@@ -23,6 +23,9 @@ export default function Safety() {
                 <h3 className="text-[22px] font-bold">{site.name}</h3>
                 <HoldChip hold={hold} />
               </div>
+              {!hold && acts.some((a) => a.severity === 5) && (
+                <p className="mt-2 text-[14px] font-semibold text-safe">Site hold lifted. Each repair still needs its own pre-job checks.</p>
+              )}
               {acts.length === 0 ? <p className="mt-3 text-[14px] text-muted">No open safety actions.</p> : (
                 <ul className="mt-3 divide-y divide-line/60">
                   {acts.map((a) => {

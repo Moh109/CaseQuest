@@ -22,6 +22,7 @@ export default function HowItWorks() {
         ))}
       </ol>
       <p className="mt-3 text-[13px] text-muted">No repair skips the safety gate. Nothing skips the log.</p>
+      <p className="mt-2 text-[14px] font-semibold text-ink">Read-only data · role-based approvals · every action logged · never controls equipment.</p>
     </div>
   );
 }

@@ -16,11 +16,14 @@ export default function AppView() {
   const { s, d } = useStore();
   const count = (t: Tab) => t === "orders" ? s.orders.filter((o) => o.status !== "approved").length : t === "shelf" ? s.reorders.filter((r) => r.status === "requested").length : t === "log" ? s.log.length : 0;
   return (
-    <section id="app" className="band-gray bg-soft text-ink scroll-mt-[52px] py-10 md:py-16">
+    <section id="app" className="band-gray bg-soft text-ink scroll-mt-[53px] py-10 md:py-16">
       <div className="mx-auto max-w-[1180px] px-4 sm:px-6">
         <div className="bg-page rounded-[28px] p-4 sm:p-6 md:p-8 shadow-[0_30px_60px_-40px_rgba(0,0,0,0.35)] band-white">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <p className="text-[13px] font-semibold text-muted">Acting as</p>
+            <div className="flex items-center gap-3">
+              <p className="text-[13px] font-semibold text-muted">Acting as</p>
+              <button onClick={() => d({ type: "reset" })} className="h-8 px-3 rounded-full text-[12px] font-semibold bg-ink/[0.07] text-ink/80 hover:text-ink">↺ Reset demo</button>
+            </div>
             <Segmented label="Role" layoutId="role" value={s.role} onChange={(r: Role) => d({ type: "role", role: r })}
               options={(Object.keys(ROLE_LABEL) as Role[]).map((r) => ({ value: r, label: <><span className="sm:hidden">{SHORT[r]}</span><span className="hidden sm:inline">{ROLE_LABEL[r]}</span></> }))} />
           </div>
