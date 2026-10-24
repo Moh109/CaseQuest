@@ -114,3 +114,16 @@ export function Segmented<T extends string>({ options, value, onChange, label, l
     </div>
   );
 }
+
+/** Tracks an element's rendered width so SVG charts can draw at real pixel size. */
+export function useWidth<T extends HTMLElement>(fallback = 800) {
+  const ref = useRef<T>(null);
+  const [w, setW] = useState(fallback);
+  useEffect(() => {
+    if (!ref.current) return;
+    const ro = new ResizeObserver(([e]) => setW(e.contentRect.width));
+    ro.observe(ref.current);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, w] as const;
+}
