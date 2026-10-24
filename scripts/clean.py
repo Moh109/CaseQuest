@@ -271,6 +271,29 @@ for name, got, exp, ok in checks:
     if not good:
         fails.append((name, got, exp))
 
+# ---- App data: daily readings, outages and machines for the morning board ----
+rd_valid = rd.copy()
+rd_valid["day"] = rd_valid["observed_utc"].dt.strftime("%Y-%m-%d")
+norm_map = assets.set_index("asset_id")["vibration_normal_mm_s"].to_dict()
+app_readings = {}
+for aid, g in rd_valid.sort_values("observed_utc").groupby("asset_id"):
+    rows = []
+    for r in g.itertuples():
+        ok = r.quality == "Valid" and r.operating_state == "Running" and pd.notna(r.vibration_mm_s)
+        rows.append([r.day, round(float(r.vibration_mm_s) / norm_map[aid], 2) if ok else None,
+                     "S" if r.operating_state == "Stopped" else ("R" if ok else "X")])
+    app_readings[aid] = rows
+app_events = [
+    {"id": r.event_id, "asset": r.asset_id, "type": r.event_type, "cause": r.cause,
+     "start": r.start_utc.strftime("%Y-%m-%d %H:%M"), "end": r.end_utc.strftime("%Y-%m-%d %H:%M"),
+     "hours": float(f"{r.stopped_hours + 1e-9:.1f}"), "wait": float(f"{r.parts_wait_hours + 1e-9:.1f}")}
+    for r in ev.sort_values("start_utc").itertuples()
+]
+app_assets = [{"id": r.asset_id, "site": r.site_id, "type": r.asset_type, "criticality": r.criticality,
+               "normal": float(r.vibration_normal_mm_s)} for r in assets.itertuples()]
+a011_fail = next(e for e in app_events if e["asset"] == "A011" and e["start"].startswith("2025-09-20"))
+log.append(f"| A011 fails Sep 20 | {a011_fail['id']} | Sep 20 | yes |")
+
 # =============== Output ===============
 data = {
     "meta": {"company": "Lone Mesa Energy", "year": 2025, "sites": n_sites, "machines": n_assets,
@@ -312,6 +335,7 @@ data = {
     "options": options,
     "rollout": {"parts_wait_target_h": round(float(pw) * 0.4), "downtime_target_h": round(float(down - options["A"]["scenarios"]["expected"]["hours"]))},
     "cleaning": [l.lstrip("- ") for l in log if l.startswith("- ")],
+    "app": {"readings": app_readings, "events": app_events, "assets": app_assets},
 }
 OUT.parent.mkdir(exist_ok=True)
 OUT.write_text(json.dumps(data, indent=1, default=str))

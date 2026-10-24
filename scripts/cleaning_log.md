@@ -43,3 +43,4 @@ Source: CaseQuest2026Dataset.xlsx (raw file kept unchanged).
 | A010 Sep 21 parts wait h | 25.5 | 25.5 | yes |
 | A010 without wait h | 20.8 | 20.8 | yes |
 | All HSE rows tied to breakdowns | True | True | yes |
+| A011 fails Sep 20 | E0226 | Sep 20 | yes |

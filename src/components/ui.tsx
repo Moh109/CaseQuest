@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useReducedMotion } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -90,7 +90,7 @@ export function Tween({ value, decimals = 0, prefix = "", suffix = "" }: {
 
 /** Apple-style segmented control. */
 export function Segmented<T extends string>({ options, value, onChange, label, layoutId }: {
-  options: { value: T; label: string }[]; value: T; onChange: (v: T) => void; label: string; layoutId: string;
+  options: { value: T; label: React.ReactNode }[]; value: T; onChange: (v: T) => void; label: string; layoutId: string;
 }) {
   return (
     <div role="radiogroup" aria-label={label} className="inline-flex p-1 rounded-full bg-ink/[0.07] max-w-full">

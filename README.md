@@ -2,9 +2,18 @@
 
 **The right part, there before the machine breaks. And no repair starts until it's safe.**
 
-A one-page product presentation for CaseQuest 2026. It uses the case's fictional company, Lone Mesa
-Energy (6 sites, 18 machines, 2025 data). It shows what the data says about breakdowns, spare
-parts and open safety actions, then walks through a working prototype of the fix.
+The morning check for Lone Mesa crews (Operation Spirit, CaseQuest 2026). A working prototype app
+built on the case's fictional company, Lone Mesa Energy (6 sites, 18 machines, 2025 data):
+
+- **Morning board**: pick a site and date. Each machine shows vibration vs normal,
+  warning/normal/down status, and whether its part is on the shelf.
+- **Work orders**: safety hold check → pre-job checks (LOTO, H₂S gas test, pressure) → part from
+  the shelf or ordered → supervisor approval. Technicians request; only the site supervisor approves.
+- **Safety**: open HSE actions per site. The HSE supervisor verifies fixes, and a site's hold lifts
+  once all its critical fixes are verified.
+- **Audit log** of every action, a how-it-works diagram, and an impact panel.
+
+Site stock % is case data. Which kit is on each shelf is simulated from it.
 
 Built with Vite, React, TypeScript, Tailwind CSS and Framer Motion. All charts are hand-built SVG.
 
