@@ -18,9 +18,9 @@ export const addDays = (d: string, n: number) => new Date(dayStart(d) + n * 864e
 export const fmtDay = (d: string) =>
   new Date(d + "T00:00:00Z").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
-/** The board is the 8:00 AM morning check. */
-export const BOARD_HOUR = 8;
-export const BOARD_TIME = "8:00 AM";
+/** The board is the 6:30 AM morning check. */
+export const BOARD_HOUR = 6.5;
+export const BOARD_TIME = "6:30 AM";
 
 /** Outage (planned or not) in progress at the board time, if any. */
 export function outageOn(asset: string, day: string) {
@@ -50,6 +50,8 @@ export type Kit = (typeof KITS)[number];
 export const PART: Record<string, Kit> = { "Transfer pump": "Bearing kit", "Lift pump": "Seal kit", Compressor: "Electrical kit" };
 export const TARGET = 4;
 export const REORDER_POINT = 2;
+/** Reorders bring a kit back up to target. Shared by the board and Parts readiness. */
+export const reorderQty = (onHand: number) => Math.max(1, TARGET - onHand);
 
 /**
  * Per-kit shelf stock is SIMULATED. The case gives each site's spare_fill_pct (real data), so each

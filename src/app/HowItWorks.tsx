@@ -1,6 +1,6 @@
 const STEPS = [
-  { t: "Daily check (existing readings)", d: "Daily vibration vs normal" },
-  { t: "Warning", d: "Flags at 1.3× normal" },
+  { t: "Parts audit + reorder points", d: "Kits counted, reorder points set" },
+  { t: "Early warning from existing daily readings", d: "Flags at 1.3× normal" },
   { t: "Safety gate", d: "Open critical fix = hold" },
   { t: "Parts shelf: on hand or order now", d: "On the shelf, or order it" },
   { t: "Approval", d: "Site supervisor signs off" },

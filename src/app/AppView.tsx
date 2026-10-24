@@ -9,7 +9,7 @@ import Shelf from "./Shelf";
 const SHORT: Record<Role, string> = { tech: "Tech", super: "Supervisor", hse: "HSE" };
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: "board", label: "Morning board" }, { id: "shelf", label: "Parts shelf" }, { id: "orders", label: "Work orders" }, { id: "safety", label: "Safety" }, { id: "log", label: "Audit log" },
+  { id: "board", label: "Morning board" }, { id: "shelf", label: "Parts readiness" }, { id: "orders", label: "Work orders" }, { id: "safety", label: "Safety" }, { id: "log", label: "Audit log" },
 ];
 
 export default function AppView() {

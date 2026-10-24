@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useMemo, useReducer } from "react";
 import { data } from "./data";
-import { HAZARD, initialStock, Kit, KITS, PART, TARGET } from "./lib";
+import { HAZARD, initialStock, Kit, KITS, PART, reorderQty } from "./lib";
 
 export type Role = "tech" | "super" | "hse";
 export const ROLE_LABEL: Record<Role, string> = { tech: "Technician", super: "Site supervisor", hse: "HSE supervisor" };
@@ -65,7 +65,7 @@ function demoState() {
   const log: Entry[] = rows.map(([at, role, action, detail], i) => ({ n: i + 1, at, day: "2025-09-19", role, action, detail, demo: true })).reverse();
   return { verified: ["H007", "H008"], orders, log, shelf };
 }
-const init: State = { role: "tech", site: "S04", day: "2025-09-19", active: null, tab: "board", reorders: [], ...demoState() };
+const init: State = { role: "tech", site: "S04", day: "2025-09-19", active: null, tab: "shelf", reorders: [], ...demoState() };
 
 function reducer(s: State, a: Action): State {
   const clock = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
@@ -127,7 +127,7 @@ function reducer(s: State, a: Action): State {
     }
     case "reorder": {
       if (s.role === "hse" || s.reorders.some((r) => r.site === a.site && r.kit === a.kit && r.status === "requested")) return s;
-      const qty = Math.max(1, TARGET - s.shelf[key(a.site, a.kit)]);
+      const qty = reorderQty(s.shelf[key(a.site, a.kit)]);
       const r: Reorder = { id: `RO-${String(s.reorders.length + 1).padStart(3, "0")}`, site: a.site, kit: a.kit, qty, status: "requested" };
       return { ...s, reorders: [r, ...s.reorders], log: add(s.role, `${r.id} reorder requested`, `${qty} × ${a.kit} for ${siteName(a.site)} · needs supervisor approval`) };
     }

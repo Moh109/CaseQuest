@@ -1,5 +1,5 @@
 import { data } from "../data";
-import { assetsAt, BOARD_TIME, fmtDay, history, REORDER_POINT, PART, statusOn } from "../lib";
+import { assetsAt, BOARD_TIME, fmtDay, history, REORDER_POINT, reorderQty, PART, statusOn } from "../lib";
 import { holdIds, key, siteName, useStore } from "../store";
 import { Btn, Chip, HoldChip, Lock, Spark, StatusChip } from "./bits";
 
@@ -48,7 +48,11 @@ export default function Board() {
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
         {assetsAt(s.site).map((a) => {
           const st = statusOn(a.id, s.day);
-          const shelf = s.shelf[key(a.site, PART[a.type])] > 0;
+          const kit = PART[a.type];
+          const onHand = s.shelf[key(a.site, kit)];
+          const shelf = onHand > 0;
+          const low = onHand < REORDER_POINT;
+          const pendingRo = s.reorders.find((r) => r.site === a.site && r.kit === kit && r.status === "requested");
           const open = s.orders.find((o) => o.asset === a.id && o.status !== "approved");
           return (
             <div key={a.id} className={`bg-panel rounded-[24px] p-5 md:p-6 flex flex-col ring-2 ${st.status === "warning" ? "ring-warnbg/80" : st.status === "down" ? "ring-ink/30" : "ring-transparent"}`}>
@@ -59,28 +63,39 @@ export default function Board() {
                 </div>
                 <StatusChip status={st.status} />
               </div>
-              <div className="mt-5 flex items-end justify-between gap-3">
-                <div>
-                  <p className="text-[40px] font-bold tracking-tighter leading-none tnum">{st.ratio == null ? "—" : `${st.ratio.toFixed(1)}×`}</p>
-                  <p className="text-[13px] text-muted mt-1">vibration vs normal ({a.normal} mm/s)</p>
+              <div className="mt-5">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-[13px] font-semibold text-muted">{kit}</p>
+                  <Chip tone="muted">Simulated</Chip>
                 </div>
-                <Spark values={history(a.id, s.day)} />
+                <p className={`mt-1 text-[24px] md:text-[26px] font-bold tracking-tight leading-tight ${shelf ? "text-safe" : "text-warn"}`}>
+                  {shelf ? `On the shelf (${onHand})` : "Not on the shelf"}
+                </p>
+                {shelf && low && <p className="text-[14px] font-semibold text-warn">Below reorder point</p>}
               </div>
-              {st.status === "down" && st.outage && (
-                <p className="mt-3 text-[13px] leading-snug"><b>Down:</b> {st.outage.cause} ({st.outage.type.toLowerCase()}), {st.outage.hours} h, {st.outage.wait} h waiting on parts.</p>
-              )}
-              <div className="mt-4 pt-4 border-t border-line/70 flex items-center justify-between gap-2">
-                <div>
-                  <p className="text-[13px] font-semibold">{PART[a.type]}</p>
-                  <p className={`text-[13px] font-bold ${shelf ? "text-safe" : "text-warn"}`}>{shelf ? `On the shelf (${s.shelf[key(a.site, PART[a.type])]})${s.shelf[key(a.site, PART[a.type])] < REORDER_POINT ? " · below reorder point" : ""}` : "Not on the shelf"}</p>
-                </div>
-                <Chip tone="muted">Simulated</Chip>
+              <div className="mt-4 pt-4 border-t border-line/70 flex items-center justify-between gap-3">
+                <p className="text-[13px] text-muted leading-snug">
+                  {st.status === "down" && st.outage
+                    ? <>Why flagged: down, {st.outage.cause.toLowerCase()} ({st.outage.hours} h, {st.outage.wait} h waiting on parts)</>
+                    : st.ratio == null ? "No valid reading today"
+                    : st.status === "warning" ? `Why flagged: ${st.ratio.toFixed(1)}× normal vibration`
+                    : `Vibration ${st.ratio.toFixed(1)}× normal`}
+                </p>
+                <Spark values={history(a.id, s.day)} />
               </div>
               <div className="mt-4">
                 {open ? (
                   <Btn kind="dark" onClick={() => d({ type: "select", id: open.id })}>Open {open.id}</Btn>
                 ) : st.status === "warning" || st.status === "down" ? (
                   <Btn onClick={() => d({ type: "open", asset: a.id, reason: st.status === "down" ? `Down: ${st.outage?.cause}` : `Vibration ${st.ratio?.toFixed(1)}× normal` })}>Start work order</Btn>
+                ) : low ? (
+                  pendingRo ? <p className="text-[14px] font-semibold text-muted h-11 flex items-center">{pendingRo.id}: waiting for supervisor</p> : (
+                    <div className="flex flex-wrap items-center gap-3">
+                      <p className="text-[14px] font-semibold">Reorder {reorderQty(onHand)} {kit}{reorderQty(onHand) > 1 ? "s" : ""}</p>
+                      <Btn kind="ghost" disabled={s.role === "hse"} title={s.role === "hse" ? "Technicians and supervisors reorder" : undefined}
+                        onClick={() => d({ type: "reorder", site: a.site, kit })}>Reorder</Btn>
+                    </div>
+                  )
                 ) : (
                   <p className="text-[13px] text-muted h-11 flex items-center">No action needed.</p>
                 )}
@@ -90,7 +105,7 @@ export default function Board() {
         })}
       </div>
       <p className="mt-4 text-[12px] text-muted leading-snug">
-        Status as of the 8:00 AM check. Readings: valid readings taken while running, from the case data. Warning at 1.3× normal. Site stock % is case data; which kit is on the shelf is simulated from it. Uses existing daily readings. No new sensors (we did not choose Option B).
+        Status as of the {BOARD_TIME} check. Readings: valid readings taken while running, from the case data. Warning at 1.3× normal. Site stock % is case data; which kit is on the shelf is simulated from it. Uses existing daily readings. No new sensors (we did not choose Option B).
         Showing {siteName(s.site)}.
       </p>
     </div>
