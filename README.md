@@ -49,7 +49,7 @@ and so on.
 ## Deploy to Vercel
 
 1. Go to [vercel.com/new](https://vercel.com/new) and sign in with GitHub.
-2. Import **Moh109/spares-radar**. If it isn't listed, click "Adjust GitHub App Permissions" and
+2. Import **Moh109/CaseQuest**. If it isn't listed, click "Adjust GitHub App Permissions" and
    give Vercel access to the repo.
 3. Vercel detects **Vite** on its own. Leave the defaults: build command `npm run build`, output
    directory `dist`, root directory `./`.
