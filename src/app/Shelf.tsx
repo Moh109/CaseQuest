@@ -26,19 +26,19 @@ export default function Shelf() {
           const req = pending.find((r) => r.site === s.site && r.kit === kit);
           const users = assetsAt(s.site).filter((a) => PART[a.type] === kit).map((a) => a.id).join(", ");
           return (
-            <div key={kit} className={`bg-panel rounded-[24px] p-5 md:p-6 ring-2 ${low ? "ring-accent/60" : "ring-transparent"}`}>
+            <div key={kit} className={`bg-panel rounded-[24px] p-5 md:p-6 ring-2 ${low ? "ring-warnbg/80" : "ring-transparent"}`}>
               <div className="flex items-start justify-between gap-2">
                 <div><p className="text-[19px] font-bold">{kit}</p><p className="text-[13px] text-muted">Used by {users}</p></div>
-                {low ? <Chip tone="accent">Below reorder point</Chip> : <Chip tone="safe">Stocked</Chip>}
+                {low ? <Chip tone="warn">Below reorder point</Chip> : <Chip tone="safe">Stocked</Chip>}
               </div>
               <p className="mt-5 text-[44px] font-bold tracking-tighter leading-none tnum">{n}<span className="text-[16px] text-muted font-semibold"> on hand</span></p>
               <p className="mt-1 text-[13px] text-muted">Reorder point {REORDER_POINT} · target {TARGET}</p>
               <div className="mt-3 h-[8px] rounded-full bg-ink/10 overflow-hidden relative">
-                <div className={`h-full rounded-full ${low ? "bg-accent" : "bg-safe"}`} style={{ width: `${Math.min(100, (n / TARGET) * 100)}%` }} />
+                <div className={`h-full rounded-full ${low ? "bg-warnbg" : "bg-safe"}`} style={{ width: `${Math.min(100, (n / TARGET) * 100)}%` }} />
                 <div className="absolute top-0 h-full w-[2px] bg-ink/60" style={{ left: `${(REORDER_POINT / TARGET) * 100}%` }} />
               </div>
               <div className="mt-5">
-                {req ? <p className="text-[14px] font-semibold text-accent h-11 flex items-center">{req.id}: waiting for supervisor</p> : (
+                {req ? <p className="text-[14px] font-semibold text-muted h-11 flex items-center">{req.id}: waiting for supervisor</p> : (
                   <Btn kind={low ? "primary" : "ghost"} disabled={s.role === "hse"} title={s.role === "hse" ? "Technicians and supervisors reorder" : undefined}
                     onClick={() => d({ type: "reorder", site: s.site, kit })}>Reorder</Btn>
                 )}
@@ -54,7 +54,7 @@ export default function Shelf() {
           {pending.map((r) => (
             <li key={r.id} className="px-5 py-3 flex flex-wrap items-center justify-between gap-3">
               <span className="text-[15px]"><b>{r.id}</b> · {r.qty} × {r.kit} · {siteName(r.site)}</span>
-              {s.role === "super" ? <Btn onClick={() => d({ type: "approveReorder", id: r.id })}>Approve</Btn>
+              {s.role === "super" ? <Btn kind="dark" onClick={() => d({ type: "approveReorder", id: r.id })}>Approve</Btn>
                 : <span className="text-[13px] text-muted">Only the site supervisor approves. Switch role to approve.</span>}
             </li>
           ))}

@@ -14,7 +14,7 @@ export default function HowItWorks() {
       <ol className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" aria-label="Workflow">
         {STEPS.map((s, i) => (
           <li key={s.t} className="relative bg-panel rounded-[20px] p-4">
-            <span className={`w-7 h-7 rounded-full grid place-items-center text-[13px] font-bold ${i === 2 ? "bg-accent text-white dark:text-[#1D1D1F]" : "bg-ink text-page"}`}>{i + 1}</span>
+            <span className={`w-7 h-7 rounded-full grid place-items-center text-[13px] font-bold ${"bg-ink text-page"}`}>{i + 1}</span>
             <p className="mt-3 font-bold text-[16px] leading-tight">{s.t}</p>
             <p className="mt-1 text-[13px] text-muted leading-snug">{s.d}</p>
             {i < STEPS.length - 1 && <span aria-hidden className="hidden lg:block absolute -right-[11px] top-1/2 -translate-y-1/2 text-muted text-[14px] z-10">→</span>}

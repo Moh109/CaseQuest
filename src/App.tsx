@@ -12,7 +12,7 @@ export default function App() {
       <main>
         <Landing />
         <AppView />
-        <section className="band-white bg-page text-ink py-14 md:py-20">
+        <section className="band-white bg-soft-white text-ink py-14 md:py-20">
           <div className="mx-auto max-w-[1180px] px-4 sm:px-6 grid grid-cols-1 gap-12">
             <HowItWorks />
             <Impact />

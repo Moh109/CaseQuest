@@ -33,7 +33,7 @@ export default function Safety() {
                         <div className="min-w-0">
                           <p className="font-semibold text-[15px]">{HAZARD[a.hazard] ?? a.hazard}</p>
                           <p className="text-[12px] text-muted">
-                            {a.id} · {a.asset_id} · {a.severity === 5 ? <b className="text-accent">critical, blocks work</b> : `severity ${a.severity}`} ·{" "}
+                            {a.id} · {a.asset_id} · {a.severity === 5 ? <b className="text-ink">critical, blocks work</b> : `severity ${a.severity}`} ·{" "}
                             {od > 0 ? `${od} days overdue as of ${s.day}` : `due ${a.due}`}
                           </p>
                         </div>

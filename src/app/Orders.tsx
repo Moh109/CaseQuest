@@ -1,7 +1,7 @@
 import { data } from "../data";
 import { PART } from "../lib";
 import { CHECKS, holdIds, key, siteName, useStore } from "../store";
-import { Btn, Chip, HoldChip } from "./bits";
+import { Btn, Chip, HoldChip, Lock } from "./bits";
 
 export default function Orders() {
   const { s, d } = useStore();
@@ -51,7 +51,7 @@ export default function Orders() {
         <ol className="mt-6 grid grid-cols-4 gap-2" aria-label="Progress">
           {steps.map((x, i) => (
             <li key={x.t}>
-              <span className={`block h-[4px] rounded-full ${x.done ? "bg-safe" : i === cur ? "bg-accent" : "bg-ink/10"}`} />
+              <span className={`block h-[4px] rounded-full ${x.done ? "bg-safe" : i === cur ? "bg-ink" : "bg-ink/10"}`} />
               <span className={`mt-2 block text-[12px] md:text-[13px] font-semibold ${i === cur ? "text-ink" : "text-muted"}`}>{i + 1}. {x.t}</span>
             </li>
           ))}
@@ -59,7 +59,7 @@ export default function Orders() {
 
         <Step n={1} title="Safety hold check" done={hold.length === 0}>
           {hold.length ? (
-            <p className="text-[15px] leading-snug"><b className="text-accent">Blocked.</b> {siteName(o.site)} has open critical fixes ({hold.join(", ")}). Only the HSE supervisor can verify them.{" "}
+            <p className="text-[15px] leading-snug"><b className="inline-flex items-center gap-1.5 rounded-full bg-[#1a1a1a] text-white px-2.5 py-0.5 text-[13px] mr-1"><Lock /> Blocked.</b> {siteName(o.site)} has open critical fixes ({hold.join(", ")}). Only the HSE supervisor can verify them.{" "}
               <button className="font-semibold underline" onClick={() => d({ type: "tab", tab: "safety" })}>Open Safety</button></p>
           ) : <p className="text-[15px]">No open critical safety fixes at {siteName(o.site)}. Clear to plan.</p>}
         </Step>
@@ -80,7 +80,7 @@ export default function Orders() {
 
         <Step n={3} title={`Part: ${PART[asset.type]}`} done={o.part !== null} locked={!checksDone || hold.length > 0}>
           <div className="flex flex-wrap items-center gap-3">
-            <p className={`font-bold text-[15px] ${shelf ? "text-safe" : "text-accent"}`}>{shelf ? "On the shelf" : "Not on the shelf"}</p>
+            <p className={`font-bold text-[15px] ${shelf ? "text-safe" : "text-warn"}`}>{shelf ? "On the shelf" : "Not on the shelf"}</p>
             <Chip tone="muted">Simulated stock</Chip>
             {o.part ? <Chip tone="safe">{o.part === "shelf" ? "Reserved from shelf" : "Order requested"}</Chip> : (
               <Btn kind="dark" disabled={!checksDone || hold.length > 0 || !canWork} onClick={() => d({ type: "part", id: o.id, part: shelf ? "shelf" : "order" })}>
@@ -96,7 +96,7 @@ export default function Orders() {
         <Step n={4} title="Supervisor approval" done={o.status === "approved"} locked={o.part === null}>
           {o.status === "approved" ? <p className="text-[15px] text-safe font-semibold">Approved. Repair released.</p>
             : o.status === "requested" ? (
-              s.role === "super" ? <Btn onClick={() => d({ type: "approve", id: o.id })}>Approve {o.id}</Btn>
+              s.role === "super" ? <Btn kind="dark" onClick={() => d({ type: "approve", id: o.id })}>Approve {o.id}</Btn>
                 : <p className="text-[15px]">Sent. Waiting for the site supervisor. <span className="text-muted">Switch role to Site supervisor to approve.</span></p>
             ) : (
               <div className="flex flex-wrap items-center gap-3">

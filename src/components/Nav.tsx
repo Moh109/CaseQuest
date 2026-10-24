@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Nav() {
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
+  // Dark glass while the nav sits over the dark hero.
+  const [overHero, setOverHero] = useState(true);
+  useEffect(() => {
+    const on = () => setOverHero(window.scrollY < (document.getElementById("top")?.offsetHeight ?? 0) - 52);
+    on();
+    window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
+  }, []);
   const toggle = () => {
     const next = !dark;
     setDark(next);
@@ -9,7 +17,7 @@ export default function Nav() {
     try { localStorage.setItem("theme", next ? "dark" : "light"); } catch { /* storage blocked */ }
   };
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-page/80 backdrop-blur-xl backdrop-saturate-150 border-b border-line/50">
+    <header className={`fixed top-0 inset-x-0 z-50 backdrop-blur-xl backdrop-saturate-150 border-b transition-colors duration-300 ${overHero ? "hero-nav bg-[#151515]/80 border-white/10" : "bg-page/80 border-line/50"}`}>
       <nav className="mx-auto max-w-[1180px] h-[52px] px-4 sm:px-6 flex items-center justify-between gap-3">
         <a href="#top" className="flex items-center gap-2 min-w-0">
           <svg width="20" height="20" viewBox="0 0 32 32" aria-hidden className="shrink-0"><circle cx="16" cy="16" r="13" fill="none" stroke="rgb(var(--accent))" strokeWidth="3" /><circle cx="16" cy="16" r="4.5" fill="rgb(var(--accent))" /></svg>

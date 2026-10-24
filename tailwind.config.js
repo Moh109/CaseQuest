@@ -14,6 +14,8 @@ export default {
         line: "rgb(var(--line) / <alpha-value>)",
         accent: "rgb(var(--accent) / <alpha-value>)",
         safe: "rgb(var(--safe) / <alpha-value>)",
+        warn: "rgb(var(--warn) / <alpha-value>)",
+        warnbg: "rgb(var(--warnbg) / <alpha-value>)",
       },
       borderRadius: { panel: "28px" },
       letterSpacing: { tightest: "-0.045em" },

@@ -1,7 +1,7 @@
 import { data } from "../data";
 import { assetsAt, BOARD_TIME, fmtDay, history, PART, statusOn } from "../lib";
 import { holdIds, key, siteName, useStore } from "../store";
-import { Btn, Chip, HoldChip, Spark, StatusChip } from "./bits";
+import { Btn, Chip, HoldChip, Lock, Spark, StatusChip } from "./bits";
 
 export default function Board() {
   const { s, d } = useStore();
@@ -18,7 +18,7 @@ export default function Board() {
             return (
               <button key={x.id} role="radio" aria-checked={on} onClick={() => d({ type: "site", site: x.id })}
                 className={`h-10 px-4 rounded-full text-[14px] font-semibold inline-flex items-center gap-2 ${on ? "bg-ink text-page" : "bg-ink/[0.07] text-ink/80"}`}>
-                {h && <span className="w-2 h-2 rounded-full bg-accent" aria-label="on hold" />}
+                {h && <span className="opacity-80" aria-label="on hold"><Lock /></span>}
                 {x.name}
               </button>
             );
@@ -38,8 +38,8 @@ export default function Board() {
         <p className="text-muted text-[15px]">{fmtDay(s.day)}, {BOARD_TIME} · {site.technicians} technicians · stocks {site.spare_fill_pct}% of critical parts</p>
       </div>
       {hold.length > 0 && (
-        <div className="mt-4 rounded-[18px] bg-accent/10 px-5 py-4 text-[15px] leading-snug">
-          <b className="text-accent">Safety hold.</b> {hold.length} critical fix{hold.length > 1 ? "es" : ""} open ({hold.join(", ")}). Work orders can be opened but no repair starts
+        <div className="mt-4 rounded-[18px] bg-[#1a1a1a] text-white px-5 py-4 text-[15px] leading-snug">
+          <b className="inline-flex items-center gap-1.5"><Lock /> Safety hold.</b> {hold.length} critical fix{hold.length > 1 ? "es" : ""} open ({hold.join(", ")}). Work orders can be opened but no repair starts
           until the HSE supervisor verifies {hold.length > 1 ? "them" : "it"}.{" "}
           <button className="font-semibold underline" onClick={() => d({ type: "tab", tab: "safety" })}>Go to Safety</button>
         </div>
@@ -51,7 +51,7 @@ export default function Board() {
           const shelf = s.shelf[key(a.site, PART[a.type])] > 0;
           const open = s.orders.find((o) => o.asset === a.id && o.status !== "approved");
           return (
-            <div key={a.id} className={`bg-panel rounded-[24px] p-5 md:p-6 flex flex-col ring-2 ${st.status === "warning" ? "ring-accent/60" : st.status === "down" ? "ring-ink/40" : "ring-transparent"}`}>
+            <div key={a.id} className={`bg-panel rounded-[24px] p-5 md:p-6 flex flex-col ring-2 ${st.status === "warning" ? "ring-warnbg/80" : st.status === "down" ? "ring-ink/30" : "ring-transparent"}`}>
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="text-[20px] font-bold">{a.id}</p>
@@ -72,7 +72,7 @@ export default function Board() {
               <div className="mt-4 pt-4 border-t border-line/70 flex items-center justify-between gap-2">
                 <div>
                   <p className="text-[13px] font-semibold">{PART[a.type]}</p>
-                  <p className={`text-[13px] font-bold ${shelf ? "text-safe" : "text-accent"}`}>{shelf ? `On the shelf (${s.shelf[key(a.site, PART[a.type])]})` : "Not on the shelf"}</p>
+                  <p className={`text-[13px] font-bold ${shelf ? "text-safe" : "text-warn"}`}>{shelf ? `On the shelf (${s.shelf[key(a.site, PART[a.type])]})` : "Not on the shelf"}</p>
                 </div>
                 <Chip tone="muted">Simulated</Chip>
               </div>
