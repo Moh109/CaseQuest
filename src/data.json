@@ -1,0 +1,562 @@
+{
+ "meta": {
+  "company": "Lone Mesa Energy",
+  "year": 2025,
+  "sites": 6,
+  "machines": 18,
+  "as_of": "2026-10-01"
+ },
+ "headline": {
+  "breakdowns": 313,
+  "downtime_h": 6598.6,
+  "loss_usd": 5608390.0,
+  "parts_wait_h": 1613.3,
+  "parts_wait_share": 0.244,
+  "avg_with_wait": 34.1,
+  "avg_without_wait": 15.4,
+  "n_with_wait": 95,
+  "n_without_wait": 218,
+  "over24": 94,
+  "over24_waited": 91,
+  "stages_with_wait": {
+   "detect": 3.61,
+   "dispatch": 4.55,
+   "parts_wait": 16.98,
+   "repair": 7.4,
+   "restart": 1.53
+  },
+  "stages_without_wait": {
+   "detect": 2.97,
+   "dispatch": 3.53,
+   "parts_wait": 0.0,
+   "repair": 7.47,
+   "restart": 1.45
+  },
+  "corr_stock_wait": -0.995,
+  "top3_loss_share": 0.694
+ },
+ "sites": [
+  {
+   "id": "S01",
+   "name": "Cedar",
+   "spare_fill_pct": 86,
+   "breakdowns": 48,
+   "waited": 6,
+   "waited_share": 0.125,
+   "downtime_h": 815.9,
+   "parts_wait_h": 110.5,
+   "loss_usd": 615782.0,
+   "technicians": 4,
+   "on_hold": false,
+   "open_actions": 1,
+   "open_sev5": 0
+  },
+  {
+   "id": "S02",
+   "name": "Mesa",
+   "spare_fill_pct": 65,
+   "breakdowns": 56,
+   "waited": 21,
+   "waited_share": 0.375,
+   "downtime_h": 1246.4,
+   "parts_wait_h": 326.6,
+   "loss_usd": 1032195.0,
+   "technicians": 3,
+   "on_hold": true,
+   "open_actions": 3,
+   "open_sev5": 2
+  },
+  {
+   "id": "S03",
+   "name": "Juniper",
+   "spare_fill_pct": 92,
+   "breakdowns": 40,
+   "waited": 4,
+   "waited_share": 0.1,
+   "downtime_h": 625.3,
+   "parts_wait_h": 88.4,
+   "loss_usd": 506754.0,
+   "technicians": 4,
+   "on_hold": false,
+   "open_actions": 0,
+   "open_sev5": 0
+  },
+  {
+   "id": "S04",
+   "name": "Arroyo",
+   "spare_fill_pct": 42,
+   "breakdowns": 68,
+   "waited": 38,
+   "waited_share": 0.559,
+   "downtime_h": 1986.1,
+   "parts_wait_h": 644.8,
+   "loss_usd": 2017459.0,
+   "technicians": 2,
+   "on_hold": true,
+   "open_actions": 3,
+   "open_sev5": 2
+  },
+  {
+   "id": "S05",
+   "name": "Canyon",
+   "spare_fill_pct": 78,
+   "breakdowns": 46,
+   "waited": 10,
+   "waited_share": 0.217,
+   "downtime_h": 844.5,
+   "parts_wait_h": 194.9,
+   "loss_usd": 594480.0,
+   "technicians": 3,
+   "on_hold": false,
+   "open_actions": 1,
+   "open_sev5": 0
+  },
+  {
+   "id": "S06",
+   "name": "Prairie",
+   "spare_fill_pct": 70,
+   "breakdowns": 55,
+   "waited": 16,
+   "waited_share": 0.291,
+   "downtime_h": 1080.3,
+   "parts_wait_h": 248.1,
+   "loss_usd": 841720.0,
+   "technicians": 3,
+   "on_hold": true,
+   "open_actions": 3,
+   "open_sev5": 2
+  }
+ ],
+ "hse": {
+  "open": 11,
+  "open_sev5": 6,
+  "avg_days_overdue_sev5": 572,
+  "avg_days_overdue_all": 477,
+  "all_linked_to_breakdowns": true,
+  "observations": 36,
+  "setup_usd": 59500.0,
+  "annual_usd": 1500.0,
+  "person_hours": 88.0,
+  "actions": [
+   {
+    "id": "H005",
+    "site_id": "S01",
+    "asset_id": "A001",
+    "hazard": "Hydrocarbon containment",
+    "severity": 3,
+    "due": "2025-11-03",
+    "days_overdue": 332,
+    "gap": "Inspect and repair secondary containment",
+    "setup_usd": 4000.0,
+    "annual_usd": 0.0
+   },
+   {
+    "id": "H007",
+    "site_id": "S02",
+    "asset_id": "A004",
+    "hazard": "H2S monitoring",
+    "severity": 5,
+    "due": "2025-02-06",
+    "days_overdue": 602,
+    "gap": "Gas monitoring readiness review",
+    "setup_usd": 4500.0,
+    "annual_usd": 500.0
+   },
+   {
+    "id": "H008",
+    "site_id": "S02",
+    "asset_id": "A004",
+    "hazard": "Energy isolation / LOTO",
+    "severity": 5,
+    "due": "2025-04-05",
+    "days_overdue": 544,
+    "gap": "Verify isolation and stored-energy controls",
+    "setup_usd": 4500.0,
+    "annual_usd": 0.0
+   },
+   {
+    "id": "H011",
+    "site_id": "S02",
+    "asset_id": "A004",
+    "hazard": "Hydrocarbon containment",
+    "severity": 3,
+    "due": "2025-10-19",
+    "days_overdue": 347,
+    "gap": "Inspect and repair secondary containment",
+    "setup_usd": 4500.0,
+    "annual_usd": 0.0
+   },
+   {
+    "id": "H019",
+    "site_id": "S04",
+    "asset_id": "A010",
+    "hazard": "H2S monitoring",
+    "severity": 5,
+    "due": "2025-02-07",
+    "days_overdue": 601,
+    "gap": "Gas monitoring readiness review",
+    "setup_usd": 5500.0,
+    "annual_usd": 500.0
+   },
+   {
+    "id": "H020",
+    "site_id": "S04",
+    "asset_id": "A010",
+    "hazard": "Energy isolation / LOTO",
+    "severity": 5,
+    "due": "2025-04-07",
+    "days_overdue": 542,
+    "gap": "Verify isolation and stored-energy controls",
+    "setup_usd": 5500.0,
+    "annual_usd": 0.0
+   },
+   {
+    "id": "H023",
+    "site_id": "S04",
+    "asset_id": "A010",
+    "hazard": "Hydrocarbon containment",
+    "severity": 3,
+    "due": "2025-08-19",
+    "days_overdue": 408,
+    "gap": "Inspect and repair secondary containment",
+    "setup_usd": 5500.0,
+    "annual_usd": 0.0
+   },
+   {
+    "id": "H029",
+    "site_id": "S05",
+    "asset_id": "A013",
+    "hazard": "Hydrocarbon containment",
+    "severity": 3,
+    "due": "2025-10-10",
+    "days_overdue": 356,
+    "gap": "Inspect and repair secondary containment",
+    "setup_usd": 6000.0,
+    "annual_usd": 0.0
+   },
+   {
+    "id": "H031",
+    "site_id": "S06",
+    "asset_id": "A016",
+    "hazard": "H2S monitoring",
+    "severity": 5,
+    "due": "2025-02-08",
+    "days_overdue": 600,
+    "gap": "Gas monitoring readiness review",
+    "setup_usd": 6500.0,
+    "annual_usd": 500.0
+   },
+   {
+    "id": "H032",
+    "site_id": "S06",
+    "asset_id": "A016",
+    "hazard": "Energy isolation / LOTO",
+    "severity": 5,
+    "due": "2025-04-09",
+    "days_overdue": 540,
+    "gap": "Verify isolation and stored-energy controls",
+    "setup_usd": 6500.0,
+    "annual_usd": 0.0
+   },
+   {
+    "id": "H035",
+    "site_id": "S06",
+    "asset_id": "A016",
+    "hazard": "Hydrocarbon containment",
+    "severity": 3,
+    "due": "2025-09-18",
+    "days_overdue": 378,
+    "gap": "Inspect and repair secondary containment",
+    "setup_usd": 6500.0,
+    "annual_usd": 0.0
+   }
+  ]
+ },
+ "a010": {
+  "normal": 2.7,
+  "series": [
+   {
+    "t": "2025-08-25",
+    "v": 2.49,
+    "ratio": 0.922
+   },
+   {
+    "t": "2025-08-26",
+    "v": 2.4,
+    "ratio": 0.889
+   },
+   {
+    "t": "2025-08-27",
+    "v": 2.2,
+    "ratio": 0.815
+   },
+   {
+    "t": "2025-08-29",
+    "v": 2.46,
+    "ratio": 0.911
+   },
+   {
+    "t": "2025-08-30",
+    "v": 2.87,
+    "ratio": 1.063
+   },
+   {
+    "t": "2025-08-31",
+    "v": 2.55,
+    "ratio": 0.944
+   },
+   {
+    "t": "2025-09-01",
+    "v": 2.53,
+    "ratio": 0.937
+   },
+   {
+    "t": "2025-09-02",
+    "v": 6.94,
+    "ratio": 2.57
+   },
+   {
+    "t": "2025-09-03",
+    "v": 4.0,
+    "ratio": 1.481
+   },
+   {
+    "t": "2025-09-04",
+    "v": 5.58,
+    "ratio": 2.067
+   },
+   {
+    "t": "2025-09-06",
+    "v": 2.32,
+    "ratio": 0.859
+   },
+   {
+    "t": "2025-09-07",
+    "v": 3.22,
+    "ratio": 1.193
+   },
+   {
+    "t": "2025-09-08",
+    "v": 2.67,
+    "ratio": 0.989
+   },
+   {
+    "t": "2025-09-09",
+    "v": 3.16,
+    "ratio": 1.17
+   },
+   {
+    "t": "2025-09-10",
+    "v": 3.26,
+    "ratio": 1.207
+   },
+   {
+    "t": "2025-09-12",
+    "v": 2.13,
+    "ratio": 0.789
+   },
+   {
+    "t": "2025-09-13",
+    "v": 2.37,
+    "ratio": 0.878
+   },
+   {
+    "t": "2025-09-14",
+    "v": 2.73,
+    "ratio": 1.011
+   },
+   {
+    "t": "2025-09-15",
+    "v": 2.63,
+    "ratio": 0.974
+   },
+   {
+    "t": "2025-09-16",
+    "v": 2.66,
+    "ratio": 0.985
+   },
+   {
+    "t": "2025-09-17",
+    "v": 2.84,
+    "ratio": 1.052
+   },
+   {
+    "t": "2025-09-18",
+    "v": 2.4,
+    "ratio": 0.889
+   },
+   {
+    "t": "2025-09-19",
+    "v": 6.8,
+    "ratio": 2.519
+   },
+   {
+    "t": "2025-09-20",
+    "v": 6.83,
+    "ratio": 2.53
+   },
+   {
+    "t": "2025-09-21",
+    "v": 5.71,
+    "ratio": 2.115
+   },
+   {
+    "t": "2025-09-24",
+    "v": 2.21,
+    "ratio": 0.819
+   },
+   {
+    "t": "2025-09-25",
+    "v": 2.94,
+    "ratio": 1.089
+   },
+   {
+    "t": "2025-09-26",
+    "v": 2.42,
+    "ratio": 0.896
+   }
+  ],
+  "warning": {
+   "t": "2025-09-19",
+   "v": 6.8,
+   "ratio": 2.519
+  },
+  "failure": {
+   "event_id": "E0200",
+   "start": "2025-09-21 12:00",
+   "end": "2025-09-23 10:15",
+   "cause": "Bearing wear",
+   "stopped_hours": 46.3,
+   "parts_wait_hours": 25.5,
+   "without_wait_hours": 20.8,
+   "warning": {
+    "t": "2025-09-19",
+    "v": 6.8,
+    "ratio": 2.519
+   },
+   "stages": {
+    "detect": 2.71,
+    "dispatch": 3.24,
+    "parts_wait": 25.46,
+    "repair": 12.39,
+    "restart": 2.45
+   }
+  },
+  "failures": [
+   {
+    "event_id": "E0199",
+    "start": "2025-09-04 12:00",
+    "end": "2025-09-06 03:13",
+    "cause": "Bearing wear",
+    "stopped_hours": 39.2,
+    "parts_wait_hours": 19.8,
+    "without_wait_hours": 19.4,
+    "warning": {
+     "t": "2025-09-02",
+     "v": 6.94,
+     "ratio": 2.57
+    },
+    "stages": {
+     "detect": 3.42,
+     "dispatch": 5.73,
+     "parts_wait": 19.81,
+     "repair": 8.61,
+     "restart": 1.65
+    }
+   },
+   {
+    "event_id": "E0200",
+    "start": "2025-09-21 12:00",
+    "end": "2025-09-23 10:15",
+    "cause": "Bearing wear",
+    "stopped_hours": 46.3,
+    "parts_wait_hours": 25.5,
+    "without_wait_hours": 20.8,
+    "warning": {
+     "t": "2025-09-19",
+     "v": 6.8,
+     "ratio": 2.519
+    },
+    "stages": {
+     "detect": 2.71,
+     "dispatch": 3.24,
+     "parts_wait": 25.46,
+     "repair": 12.39,
+     "restart": 2.45
+    }
+   }
+  ],
+  "a011_ratio_sep19": 1.68
+ },
+ "options": {
+  "A": {
+   "option_id": "O4",
+   "setup_usd": 227500.0,
+   "annual_usd": 19500.0,
+   "year1_usd": 247000.0,
+   "scenarios": {
+    "cautious": {
+     "hours": 564.7,
+     "profit": 491373.0,
+     "parts_wait_after": 1048.7,
+     "payback_months": 6.0
+    },
+    "expected": {
+     "hours": 968.0,
+     "profit": 842354.0,
+     "parts_wait_after": 645.3,
+     "payback_months": 3.5
+    },
+    "optimistic": {
+     "hours": 1210.0,
+     "profit": 1052943.0,
+     "parts_wait_after": 403.3,
+     "payback_months": 2.8
+    }
+   }
+  },
+  "B": {
+   "option_id": "O1",
+   "setup_usd": 457500.0,
+   "annual_usd": 108300.0,
+   "year1_usd": 565800.0,
+   "scenarios": {
+    "cautious": {
+     "hours": 364.4,
+     "profit": 304131.0,
+     "parts_wait_after": 879.3,
+     "payback_months": 22.3
+    },
+    "expected": {
+     "hours": 688.7,
+     "profit": 574066.0,
+     "parts_wait_after": 879.3,
+     "payback_months": 11.8
+    },
+    "optimistic": {
+     "hours": 915.0,
+     "profit": 762206.0,
+     "parts_wait_after": 879.3,
+     "payback_months": 8.9
+    }
+   }
+  }
+ },
+ "rollout": {
+  "parts_wait_target_h": 645,
+  "downtime_target_h": 5631
+ },
+ "cleaning": [
+  "**Assets**: stripped 'bbl/hr' text from 3 capacity values.",
+  "**Events**: normalized 8 asset IDs ('11'->A011, '8'->A008, 'A09'->A009, 'a003'->A003, 'a006'->A006, 'a010'->A010).",
+  "**Events**: dropped 2 exact duplicate rows (E0021, E0141); 387 -> 385 rows.",
+  "**Events**: filled 4 blank stopped_hours from the sum of the 5 stages (E0012, E0072, E0192, E0292).",
+  "**Events**: rebuilt start_utc = opened_utc - detect_hours and end_utc = closed_utc for every row (raw start times mixed formats and some had lost their time of day).",
+  "**Events**: 14 parts invoices pending: parts_usd left as unknown (null), not 0.",
+  "**Events**: loss_usd = lost_oil_bbl * (1 - recoverable_fraction) * (price - variable_cost) for the asset-month of the rebuilt start.",
+  "**Readings**: dropped 6594 exact duplicate rows; 6570 left.",
+  "**Readings**: converted 4 Fahrenheit temperatures to C (142.52 F, 138.38 F, 146.48 F, 143.06 F).",
+  "**Readings**: used the provided asset_id mapping (legacy LEG-xxx tags kept in asset_tag). Missing and Suspect readings kept in the table but excluded from charts.",
+  "**HSE**: dropped 36 exact duplicate rows; 72 -> 36."
+ ]
+}

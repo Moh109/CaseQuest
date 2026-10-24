@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: 29 29 31;
+  --muted: 110 110 115;
+  --page: 255 255 255;
+  --band: 245 245 247;
+  --panel: 245 245 247;
+  --line: 210 210 215;
+  --accent: 196 86 26;
+  --safe: 36 128 61;
+  --seg1: 72 72 77;
+  --seg2: 134 134 139;
+  --seg4: 174 174 178;
+  --seg5: 210 210 215;
+  color-scheme: light;
+}
+.dark {
+  --ink: 245 245 247;
+  --muted: 161 161 166;
+  --page: 0 0 0;
+  --band: 22 22 23;
+  --panel: 22 22 23;
+  --line: 66 66 69;
+  --accent: 244 144 72;
+  --safe: 48 209 88;
+  --seg1: 220 220 224;
+  --seg2: 160 160 166;
+  --seg4: 110 110 115;
+  --seg5: 72 72 77;
+  color-scheme: dark;
+}
+/* Panels sit on the opposite neutral of their band */
+.band-white { --panel: var(--band); }
+.band-gray { --panel: var(--page); }
+.dark .band-gray { --panel: 0 0 0; }
+.dark .band-white { --panel: 22 22 23; }
+
+/* The one always-dark band */
+.band-dark {
+  --ink: 245 245 247;
+  --muted: 161 161 166;
+  --page: 0 0 0;
+  --panel: 29 29 31;
+  --line: 66 66 69;
+  --accent: 244 144 72;
+  --safe: 48 209 88;
+  color-scheme: dark;
+}
+.dark .band-dark { --page: 10 10 12; --panel: 28 28 30; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: rgb(var(--page));
+  color: rgb(var(--ink));
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+.tnum { font-variant-numeric: tabular-nums; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+:focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 3px; border-radius: 8px; }
