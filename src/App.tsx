@@ -1,6 +1,7 @@
 import Nav from "./components/Nav";
 import Hero from "./sections/Hero";
 import FindingParts from "./sections/FindingParts";
+import FindingStock from "./sections/FindingStock";
 import FindingSafety from "./sections/FindingSafety";
 import FindingWarning from "./sections/FindingWarning";
 import Prototype from "./sections/Prototype";
@@ -15,6 +16,7 @@ export default function App() {
       <main>
         <Hero />
         <FindingParts />
+        <FindingStock />
         <FindingSafety />
         <FindingWarning />
         <Prototype />
