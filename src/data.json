@@ -134,6 +134,11 @@
   "avg_days_overdue_all": 477,
   "all_linked_to_breakdowns": true,
   "observations": 36,
+  "outcomes": {
+   "Control observation": 18,
+   "Near miss": 12,
+   "Contained spill": 6
+  },
   "setup_usd": 59500.0,
   "annual_usd": 1500.0,
   "person_hours": 88.0,

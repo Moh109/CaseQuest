@@ -292,6 +292,7 @@ data = {
         "open": len(open_h), "open_sev5": len(sev5), "avg_days_overdue_sev5": round(float(sev5["days_overdue"].mean())),
         "avg_days_overdue_all": round(float(open_h["days_overdue"].mean())),
         "all_linked_to_breakdowns": all_in_breakdowns, "observations": len(hse),
+        "outcomes": {k: int(v) for k, v in hse["outcome"].value_counts().items()},
         "setup_usd": hse_setup, "annual_usd": hse_annual, "person_hours": hse_hours,
         "actions": [{"id": r.hse_id, "site_id": r.site_id, "asset_id": r.asset_id, "hazard": r.hazard,
                      "severity": int(r.potential_severity), "due": r.due_date.strftime("%Y-%m-%d"),

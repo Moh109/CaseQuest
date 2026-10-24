@@ -16,6 +16,7 @@ export default function Nav() {
   const [active, setActive] = useState("");
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
+  const [overDark, setOverDark] = useState(false);
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
 
   useEffect(() => {
@@ -24,6 +25,16 @@ export default function Nav() {
       { rootMargin: "-45% 0px -50% 0px" },
     );
     WATCH.forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+    return () => io.disconnect();
+  }, []);
+
+  // Go dark while the nav sits over the always-dark band, so the frosted glass doesn't turn muddy gray.
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => setOverDark(e.isIntersecting)),
+      { rootMargin: "0px 0px -94% 0px" },
+    );
+    document.querySelectorAll("section.band-dark").forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
 
@@ -45,7 +56,7 @@ export default function Nav() {
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-page/75 backdrop-blur-xl backdrop-saturate-150 border-b border-line/50">
+    <header className={`${overDark ? "band-dark text-ink" : ""} fixed top-0 inset-x-0 z-50 transition-colors duration-500 bg-page/75 backdrop-blur-xl backdrop-saturate-150 border-b border-line/50`}>
       <nav className="mx-auto max-w-[1080px] h-[52px] px-4 sm:px-6 flex items-center justify-between gap-4">
         <a href="#top" className="flex items-center gap-2 font-bold text-[17px] tracking-tight text-ink">
           <RadarMark /> Spares Radar
