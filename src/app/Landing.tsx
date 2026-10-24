@@ -9,6 +9,7 @@ export default function Landing() {
         <p className="mt-5 text-[19px] md:text-[23px] text-muted font-medium leading-snug max-w-[760px]">
           See which machines are drifting, whether their part is on the shelf, and whether the site is safe to work. Then plan the repair before it breaks.
         </p>
+        <p className="mt-3 text-[16px] md:text-[18px] font-semibold text-ink">Uses the daily readings Lone Mesa already collects. No new sensors needed.</p>
         <a href="#app" className="mt-8 inline-flex items-center h-12 px-7 rounded-full bg-accent text-white dark:text-[#1D1D1F] font-semibold text-[17px]">Open the app ↓</a>
       </div>
     </section>

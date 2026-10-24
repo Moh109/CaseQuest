@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useMemo, useReducer } from "react";
 import { data } from "./data";
-import { HAZARD } from "./lib";
+import { HAZARD, initialStock, Kit, KITS, PART, TARGET } from "./lib";
 
 export type Role = "tech" | "super" | "hse";
 export const ROLE_LABEL: Record<Role, string> = { tech: "Technician", super: "Site supervisor", hse: "HSE supervisor" };
@@ -15,19 +15,24 @@ export type Order = {
   checks: boolean[]; part: "shelf" | "order" | null; status: "open" | "requested" | "approved";
 };
 export type Entry = { n: number; at: string; day: string; role: Role | "system"; action: string; detail: string };
-type State = { role: Role; site: string; day: string; verified: string[]; orders: Order[]; log: Entry[]; active: string | null; tab: Tab };
-export type Tab = "board" | "orders" | "safety" | "log";
+export type Reorder = { id: string; site: string; kit: Kit; qty: number; status: "requested" | "approved" };
+type State = { role: Role; site: string; day: string; verified: string[]; orders: Order[]; log: Entry[]; active: string | null; tab: Tab;
+  shelf: Record<string, number>; reorders: Reorder[] };
+export type Tab = "board" | "orders" | "shelf" | "safety" | "log";
 
 type Action =
   | { type: "role"; role: Role } | { type: "site"; site: string } | { type: "day"; day: string } | { type: "tab"; tab: Tab }
   | { type: "verify"; id: string } | { type: "open"; asset: string; reason: string } | { type: "select"; id: string }
   | { type: "check"; id: string; i: number } | { type: "part"; id: string; part: "shelf" | "order" }
-  | { type: "request"; id: string } | { type: "approve"; id: string } | { type: "reset" };
+  | { type: "request"; id: string } | { type: "approve"; id: string } | { type: "reset" }
+  | { type: "reorder"; site: string; kit: Kit } | { type: "approveReorder"; id: string };
 
 const sev5 = data.hse.actions.filter((a) => a.severity === 5);
 export const holdIds = (site: string, verified: string[]) => sev5.filter((a) => a.site_id === site && !verified.includes(a.id)).map((a) => a.id);
 
-const init: State = { role: "tech", site: "S04", day: "2025-09-19", verified: [], orders: [], log: [], active: null, tab: "board" };
+export const key = (site: string, kit: Kit) => `${site}:${kit}`;
+const shelf0 = Object.fromEntries(data.sites.flatMap((x) => KITS.map((k) => [key(x.id, k), initialStock(x.id, k)])));
+const init: State = { role: "tech", site: "S04", day: "2025-09-19", verified: [], orders: [], log: [], active: null, tab: "board", shelf: shelf0, reorders: [] };
 
 function reducer(s: State, a: Action): State {
   const clock = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
@@ -70,7 +75,11 @@ function reducer(s: State, a: Action): State {
     }
     case "part": {
       if (s.role === "hse") return s;
-      return { ...s, orders: upd(a.id, (x) => ({ ...x, part: a.part })),
+      const o = ord(a.id);
+      const k = key(o.site, PART[data.app.assets.find((x) => x.id === o.asset)!.type]);
+      if (a.part === "shelf" && !(s.shelf[k] > 0)) return s;
+      const shelf = a.part === "shelf" ? { ...s.shelf, [k]: s.shelf[k] - 1 } : s.shelf;
+      return { ...s, shelf, orders: upd(a.id, (x) => ({ ...x, part: a.part })),
         log: add(s.role, a.part === "shelf" ? `${a.id} part reserved` : `${a.id} part order requested`, a.part === "shelf" ? "Taken from site shelf" : "Needs supervisor approval") };
     }
     case "request": {
@@ -82,6 +91,20 @@ function reducer(s: State, a: Action): State {
       const o = ord(a.id);
       return { ...s, orders: upd(a.id, (x) => ({ ...x, status: "approved" })),
         log: add("super", `${a.id} approved`, o.part === "order" ? "Repair released, part order placed" : "Repair released") };
+    }
+    case "reorder": {
+      if (s.role === "hse" || s.reorders.some((r) => r.site === a.site && r.kit === a.kit && r.status === "requested")) return s;
+      const qty = Math.max(1, TARGET - s.shelf[key(a.site, a.kit)]);
+      const r: Reorder = { id: `RO-${String(s.reorders.length + 1).padStart(3, "0")}`, site: a.site, kit: a.kit, qty, status: "requested" };
+      return { ...s, reorders: [r, ...s.reorders], log: add(s.role, `${r.id} reorder requested`, `${qty} × ${a.kit} for ${siteName(a.site)} · needs supervisor approval`) };
+    }
+    case "approveReorder": {
+      if (s.role !== "super") return s;
+      const r = s.reorders.find((x) => x.id === a.id)!;
+      const k = key(r.site, r.kit);
+      return { ...s, shelf: { ...s.shelf, [k]: s.shelf[k] + r.qty },
+        reorders: s.reorders.map((x) => (x.id === a.id ? { ...x, status: "approved" } : x)),
+        log: add("super", `${r.id} approved`, `${r.qty} × ${r.kit} restocked at ${siteName(r.site)} (simulated delivery)`) };
     }
     case "reset": return { ...init, role: s.role };
   }

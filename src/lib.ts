@@ -18,10 +18,14 @@ export const addDays = (d: string, n: number) => new Date(dayStart(d) + n * 864e
 export const fmtDay = (d: string) =>
   new Date(d + "T00:00:00Z").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
-/** Outage (planned or not) overlapping the board date, if any. */
+/** The board is the 8:00 AM morning check. */
+export const BOARD_HOUR = 8;
+export const BOARD_TIME = "8:00 AM";
+
+/** Outage (planned or not) in progress at the board time, if any. */
 export function outageOn(asset: string, day: string) {
-  const s = dayStart(day), e = s + 864e5;
-  return app.events.find((ev) => ev.asset === asset && ts(ev.start) < e && ts(ev.end) >= s);
+  const t = dayStart(day) + BOARD_HOUR * 36e5;
+  return app.events.find((ev) => ev.asset === asset && ts(ev.start) <= t && ts(ev.end) > t);
 }
 
 export function readingOn(asset: string, day: string) {
@@ -40,22 +44,24 @@ export function statusOn(asset: string, day: string): { status: Status; ratio: n
 export const history = (asset: string, day: string, n = 14) =>
   Array.from({ length: n }, (_, i) => readingOn(asset, addDays(day, i - n + 1)).ratio);
 
-export const PART: Record<string, string> = {
-  "Transfer pump": "Bearing kit",
-  "Lift pump": "Seal and bearing kit",
-  Compressor: "Valve and bearing kit",
-};
+/** Critical kits each site keeps, and which machine type uses which kit. */
+export const KITS = ["Bearing kit", "Seal kit", "Electrical kit"] as const;
+export type Kit = (typeof KITS)[number];
+export const PART: Record<string, Kit> = { "Transfer pump": "Bearing kit", "Lift pump": "Seal kit", Compressor: "Electrical kit" };
+export const TARGET = 4;
+export const REORDER_POINT = 2;
 
 /**
- * Per-part shelf stock is SIMULATED: the case only gives each site's fill rate (real data),
- * so each machine's kit is "on the shelf" with that probability, seeded by asset ID so it's stable.
- * A010's kit is set out of stock to match the Sep 21 outage, which waited 25.5 h on parts.
+ * Per-kit shelf stock is SIMULATED. The case gives each site's spare_fill_pct (real data), so each
+ * kit starts at about TARGET × fill, with a small stable jitter per site and kit.
+ * Arroyo's bearing kit starts at 0 to match A010's Sep 21 outage, which waited 25.5 h on parts.
  */
-export function partOnShelf(a: Asset) {
-  if (a.id === "A010") return false;
+export function initialStock(site: string, kit: Kit) {
+  if (site === "S04" && kit === "Bearing kit") return 0;
   let h = 7;
-  for (const c of a.id + a.site) h = (h * 31 + c.charCodeAt(0)) % 1000;
-  return h % 100 < siteById[a.site].spare_fill_pct;
+  for (const c of site + kit) h = (h * 31 + c.charCodeAt(0)) % 997;
+  const fill = siteById[site].spare_fill_pct / 100;
+  return Math.max(site === "S04" ? 1 : 0, Math.round(TARGET * fill - (h % 3) * 0.4));
 }
 
 export const HAZARD: Record<string, string> = {

@@ -4,16 +4,17 @@ import Board from "./Board";
 import Log from "./Log";
 import Orders from "./Orders";
 import Safety from "./Safety";
+import Shelf from "./Shelf";
 
 const SHORT: Record<Role, string> = { tech: "Tech", super: "Supervisor", hse: "HSE" };
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: "board", label: "Morning board" }, { id: "orders", label: "Work orders" }, { id: "safety", label: "Safety" }, { id: "log", label: "Audit log" },
+  { id: "board", label: "Morning board" }, { id: "orders", label: "Work orders" }, { id: "shelf", label: "Parts shelf" }, { id: "safety", label: "Safety" }, { id: "log", label: "Audit log" },
 ];
 
 export default function AppView() {
   const { s, d } = useStore();
-  const count = (t: Tab) => t === "orders" ? s.orders.filter((o) => o.status !== "approved").length : t === "log" ? s.log.length : 0;
+  const count = (t: Tab) => t === "orders" ? s.orders.filter((o) => o.status !== "approved").length : t === "shelf" ? s.reorders.filter((r) => r.status === "requested").length : t === "log" ? s.log.length : 0;
   return (
     <section id="app" className="band-gray bg-band text-ink scroll-mt-[52px] py-10 md:py-16">
       <div className="mx-auto max-w-[1180px] px-4 sm:px-6">
@@ -34,6 +35,7 @@ export default function AppView() {
           <div className="mt-6">
             {s.tab === "board" && <Board />}
             {s.tab === "orders" && <Orders />}
+            {s.tab === "shelf" && <Shelf />}
             {s.tab === "safety" && <Safety />}
             {s.tab === "log" && <Log />}
           </div>

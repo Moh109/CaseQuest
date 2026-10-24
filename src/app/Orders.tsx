@@ -1,6 +1,6 @@
 import { data } from "../data";
-import { PART, partOnShelf } from "../lib";
-import { CHECKS, holdIds, siteName, useStore } from "../store";
+import { PART } from "../lib";
+import { CHECKS, holdIds, key, siteName, useStore } from "../store";
 import { Btn, Chip, HoldChip } from "./bits";
 
 export default function Orders() {
@@ -17,7 +17,7 @@ export default function Orders() {
   const asset = data.app.assets.find((a) => a.id === o.asset)!;
   const hold = holdIds(o.site, s.verified);
   const checksDone = o.checks.every(Boolean);
-  const shelf = partOnShelf(asset);
+  const shelf = s.shelf[key(o.site, PART[asset.type])] > 0;
   const canWork = s.role !== "hse";
   const steps = [
     { t: "Safety hold", done: hold.length === 0 },

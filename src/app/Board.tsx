@@ -1,6 +1,6 @@
 import { data } from "../data";
-import { assetsAt, fmtDay, history, PART, partOnShelf, statusOn } from "../lib";
-import { holdIds, siteName, useStore } from "../store";
+import { assetsAt, BOARD_TIME, fmtDay, history, PART, statusOn } from "../lib";
+import { holdIds, key, siteName, useStore } from "../store";
 import { Btn, Chip, HoldChip, Spark, StatusChip } from "./bits";
 
 export default function Board() {
@@ -35,7 +35,7 @@ export default function Board() {
       <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
         <h3 className="text-[28px] md:text-[36px] font-bold tracking-tight">{site.name}</h3>
         <HoldChip hold={hold.length > 0} />
-        <p className="text-muted text-[15px]">{fmtDay(s.day)} · {site.technicians} technicians · stocks {site.spare_fill_pct}% of critical parts</p>
+        <p className="text-muted text-[15px]">{fmtDay(s.day)}, {BOARD_TIME} · {site.technicians} technicians · stocks {site.spare_fill_pct}% of critical parts</p>
       </div>
       {hold.length > 0 && (
         <div className="mt-4 rounded-[18px] bg-accent/10 px-5 py-4 text-[15px] leading-snug">
@@ -48,7 +48,7 @@ export default function Board() {
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
         {assetsAt(s.site).map((a) => {
           const st = statusOn(a.id, s.day);
-          const shelf = partOnShelf(a);
+          const shelf = s.shelf[key(a.site, PART[a.type])] > 0;
           const open = s.orders.find((o) => o.asset === a.id && o.status !== "approved");
           return (
             <div key={a.id} className={`bg-panel rounded-[24px] p-5 md:p-6 flex flex-col ring-2 ${st.status === "warning" ? "ring-accent/60" : st.status === "down" ? "ring-ink/40" : "ring-transparent"}`}>
@@ -72,7 +72,7 @@ export default function Board() {
               <div className="mt-4 pt-4 border-t border-line/70 flex items-center justify-between gap-2">
                 <div>
                   <p className="text-[13px] font-semibold">{PART[a.type]}</p>
-                  <p className={`text-[13px] font-bold ${shelf ? "text-safe" : "text-accent"}`}>{shelf ? "On the shelf" : "Not on the shelf"}</p>
+                  <p className={`text-[13px] font-bold ${shelf ? "text-safe" : "text-accent"}`}>{shelf ? `On the shelf (${s.shelf[key(a.site, PART[a.type])]})` : "Not on the shelf"}</p>
                 </div>
                 <Chip tone="muted">Simulated</Chip>
               </div>
@@ -90,7 +90,7 @@ export default function Board() {
         })}
       </div>
       <p className="mt-4 text-[12px] text-muted leading-snug">
-        Readings: valid readings taken while running, from the case data. Warning at 1.3× normal. Site stock % is case data; which kit is on the shelf is simulated from it.
+        Status as of the 8:00 AM check. Readings: valid readings taken while running, from the case data. Warning at 1.3× normal. Site stock % is case data; which kit is on the shelf is simulated from it.
         Showing {siteName(s.site)}.
       </p>
     </div>
