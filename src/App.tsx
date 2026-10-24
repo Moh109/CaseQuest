@@ -5,6 +5,8 @@ import FindingSafety from "./sections/FindingSafety";
 import FindingWarning from "./sections/FindingWarning";
 import Prototype from "./sections/Prototype";
 import Options from "./sections/Options";
+import Rollout from "./sections/Rollout";
+import Close from "./sections/Close";
 
 export default function App() {
   return (
@@ -17,6 +19,8 @@ export default function App() {
         <FindingWarning />
         <Prototype />
         <Options />
+        <Rollout />
+        <Close />
       </main>
     </>
   );
